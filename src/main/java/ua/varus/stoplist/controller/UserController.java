@@ -53,10 +53,16 @@ public class UserController {
 		return new ModelAndView("users");
 	}
 
-	@Secured({"ROLE_RADMIN", "ROLE_SADMIN"})
+	@Secured({"ROLE_RADMIN", "ROLE_SADMIN", "ROLE_OPERATOR", "ROLE_SECURITY"})
 	@RequestMapping(value = "/tableStopList", method = RequestMethod.GET)
 	public ModelAndView tableStopList(){
 		return new ModelAndView("tableStopList");
+	}
+
+	@Secured({"ROLE_RADMIN", "ROLE_SADMIN", "ROLE_SECURITY"})
+	@RequestMapping(value = "/tableCodificator", method = RequestMethod.GET)
+	public ModelAndView tableCodificator(){
+		return new ModelAndView("tableCodificator");
 	}
 
 
@@ -142,7 +148,8 @@ public class UserController {
 	public ModelAndView stoplistPage(Principal principal) {
 		User user = userDetailsService.getUser(principal.getName());
 		ModelAndView model = new ModelAndView();
-		model.addObject("login", user.getFirstname());
+
+		model.addObject("login", user.getUsername());
 		model.addObject("firstname", user.getFirstname());
 		model.addObject("lastname", user.getLastname());
 		model.addObject("position", user.getPosition());

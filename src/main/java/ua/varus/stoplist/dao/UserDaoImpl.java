@@ -77,6 +77,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public byte[] getAvatar(String userName) {
+        System.out.println(userName);
         try {
             byte[] image = jdbcTemplate.queryForObject(GET_AVATAR, (rs, rowNum) -> rs.getBytes(1), userName);
             return image;

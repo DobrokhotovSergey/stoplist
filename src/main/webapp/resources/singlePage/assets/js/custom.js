@@ -5,6 +5,26 @@ $(document).ready(function() {
   var app = $.spapp({pageNotFound : 'error_404'}); // initialize
     // define routes
     app.route({
+        view: 'tableStopList',
+        onReady: function () {
+            NProgress.done();
+            unblock_screen();
+            // ajaxGetLisStoplist();
+            // ajaxOnlineUsersChart();
+        }
+    });
+
+
+    app.route({
+        view: 'tableCodificator',
+        onReady: function () {
+            NProgress.done();
+            unblock_screen();
+            // ajaxGetLisStoplist();
+            // ajaxOnlineUsersChart();
+        }
+    });
+    app.route({
         view: 'users',
         onCreate: function () {
             // getPageUsers();
@@ -18,15 +38,6 @@ $(document).ready(function() {
                 unblock_screen();
             }
 
-        }
-    });
-    app.route({
-        view: 'tableStopList',
-        onReady: function () {
-            NProgress.done();
-            unblock_screen();
-            // ajaxGetLisStoplist();
-            // ajaxOnlineUsersChart();
         }
     });
   // run app

@@ -73,4 +73,52 @@ create table stoplist
   create_company varchar(255) not null,
   created_department varchar(50) not null,
   source varchar(100)
-)
+);
+
+/*таблица кодификаторов*/
+create table stoplist_codificators
+(
+  code int primary key,
+  name varchar(255)
+
+);
+
+
+/*наполнение таблицы кодификаторов*/
+insert into stoplist_codificators values(1, 'сотрудники, совершившие хищение или мошенничество');
+insert into stoplist_codificators values(2, 'клиенты-воры/мошенники');
+insert into stoplist_codificators values(3, 'сотрудники с негативными результатами полиграфа');
+insert into stoplist_codificators values(4, 'неблагонадежные партнеры');
+insert into stoplist_codificators values(5, 'ранее судимые');
+
+/*Справочник компаний Стоп-листа:*/
+create table stoplist_company
+(
+  name varchar(255) primary key
+
+);
+
+insert into stoplist_company values('OMEGA');
+insert into stoplist_company values('RUSH');
+
+/*Справочник подразделений Стоп-листа:*/
+create table stoplist_department
+(
+  name varchar(255) primary key
+
+);
+insert into stoplist_department values('Security');
+insert into stoplist_department values('Risk');
+
+
+create table stoplist_source
+(
+  name varchar(255) primary key
+
+);
+
+insert into stoplist_source values('Заключения расследований Департамента Безопасности');
+
+insert into stoplist_source values('Базы МВД');
+insert into stoplist_source values('Открытые реестры');
+insert into stoplist_source values('Полиграфологические тесты');

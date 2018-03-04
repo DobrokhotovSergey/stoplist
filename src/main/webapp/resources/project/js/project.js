@@ -34,13 +34,14 @@ function beforeSend(){
 }
 function notifyAfterAjax(type, msg){
     var delay = 4000;
+    var msgType = 'Уведомление';
     if(type == 'danger'){
-        delay = 100000;
+        delay = 5000;
     }
     new PNotify({
         delay: delay,
         history: false,
-        title: 'Regular '+type,
+        title: msgType,
         text: msg,
         type: type,
         styling: 'bootstrap3'

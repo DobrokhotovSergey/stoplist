@@ -1,6 +1,7 @@
 package ua.varus.stoplist.jdbc;
 
 import org.springframework.jdbc.core.RowMapper;
+import ua.varus.stoplist.domain.Codificator;
 import ua.varus.stoplist.domain.StoplistRow;
 
 import java.sql.ResultSet;
@@ -29,6 +30,12 @@ public class StoplistRowMapperImpl implements RowMapper<StoplistRow> {
             removeDateTime = removeDate.toLocalDateTime();
         }
 
+        Codificator codificators = Codificator.builder()
+                .code(rs.getByte("codificator_code"))
+                .name(rs.getString("codificator_name")).build();
+
+        StoplistRow s2 = new StoplistRow();
+        s2.setSource(rs.getString("source"));
 
         StoplistRow stoplistRow = StoplistRow.builder()
                 .id(rs.getInt("id"))
@@ -43,12 +50,12 @@ public class StoplistRowMapperImpl implements RowMapper<StoplistRow> {
                 .status(rs.getString("status"))
                 .removeDate(removeDateTime)
                 .comment(rs.getString("comment"))
-                .codificator(rs.getByte("codificator"))
+                .codificator(codificators)
                 .createLoginEmployee(rs.getString("create_login_employee"))
                 .editLoginEmployee(rs.getString("edit_login_employee"))
                 .createCompany(rs.getString("create_company"))
                 .createDepartment(rs.getString("created_department"))
-                .source(rs.getString("source"))
+                .source(s2.getSource())
                 .build();
 
         return stoplistRow;

@@ -7,15 +7,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+import ua.varus.stoplist.domain.Codificator;
 import ua.varus.stoplist.domain.StoplistRow;
 import ua.varus.stoplist.domain.StoplistSearchForm;
+import ua.varus.stoplist.jdbc.CodificatorsRowMapperImpl;
+import ua.varus.stoplist.jdbc.StoplistOperatorRowMapperImpl;
+import ua.varus.stoplist.jdbc.StoplistRiskAdminRowMapperImpl;
 import ua.varus.stoplist.jdbc.StoplistRowMapperImpl;
+import ua.varus.stoplist.service.UserService;
 
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Repository
@@ -25,10 +32,12 @@ public class StoplistDaoImpl implements StoplistDao {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private UserService userService;
 
     private static final String SELECT_STOPLIST = "SELECT id, inn, okpo, fio, birth_date, pasport_serial, " +
-            "pasport_number, create_date, edit_date, status, remove_date, comment, codificator, create_login_employee," +
-            "edit_login_employee, create_company, created_department, source FROM stoplist ";
+            "pasport_number, create_date, edit_date, status, remove_date, comment, c.code as codificator_code, c.name as codificator_name, create_login_employee," +
+            "edit_login_employee, create_company, created_department, source FROM stoplist t join stoplist_codificators c on t.codificator = c.code ";
 
     ;
 
@@ -54,8 +63,31 @@ public class StoplistDaoImpl implements StoplistDao {
 
         try{
 
-            List<StoplistRow> list = jdbcTemplate.query(SELECT_STOPLIST+QUERY, new StoplistRowMapperImpl(),
-                    listObject.stream().toArray(String[]::new));
+            Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+
+            Collection<GrantedAuthority> roles = ((User)auth.getPrincipal()).getAuthorities();
+
+
+            List<StoplistRow> list;
+            String a = roles.toArray()[0].toString();
+
+            if("ROLE_OPERATOR".equals(a)){
+
+                list = jdbcTemplate.query(SELECT_STOPLIST+QUERY, new StoplistOperatorRowMapperImpl(),
+                        listObject.stream().toArray(String[]::new));
+
+            }else if("ROLE_RADMIN".equals(a)){
+                list = jdbcTemplate.query(SELECT_STOPLIST+QUERY, new StoplistRowMapperImpl(),
+                        listObject.stream().toArray(String[]::new));
+            }
+            else{
+                    list = jdbcTemplate.query(SELECT_STOPLIST+QUERY, new StoplistRowMapperImpl(),
+                            listObject.stream().toArray(String[]::new));
+            }
+
+
+
+
 
             return list;
 
@@ -69,8 +101,6 @@ public class StoplistDaoImpl implements StoplistDao {
 
     @Override
     public StoplistRow insertStopList(StoplistRow stoplistRow) {
-
-        String innOrOkpo = stoplistRow.getStatus();
 
         boolean containInnOrOkpo = stoplistRow.getInn()!=null;
         String QUERY = "insert into stoplist (create_date, fio, comment, codificator, create_login_employee, edit_login_employee, " +
@@ -89,10 +119,8 @@ public class StoplistDaoImpl implements StoplistDao {
             QUERY = QUERY.replace(", innOrOkpo", "");
             QUERY = QUERY.replaceFirst("\\?\\,","");
         }
-       Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
-       String userName = ((User)auth.getPrincipal()).getUsername();
-
+       String userName = userService.getUser();
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
@@ -102,7 +130,7 @@ public class StoplistDaoImpl implements StoplistDao {
                         PreparedStatement ps = conn.prepareStatement(finalQUERY, new String[]{"id"});
                         ps.setString(1, stoplistRow.getFio());
                         ps.setString(2, stoplistRow.getComment());
-                        ps.setByte(3, stoplistRow.getCodificator());
+                        ps.setByte(3, stoplistRow.getCodificator().getCode());
                         ps.setString(4, userName);
                         ps.setString(5, userName);
                         ps.setString(6, stoplistRow.getCreateCompany());
@@ -110,7 +138,11 @@ public class StoplistDaoImpl implements StoplistDao {
                         ps.setString(8, stoplistRow.getSource());
                         ps.setString(9, stoplistRow.getPasportSerial());
                         ps.setString(10, stoplistRow.getPasportNumber());
-                        ps.setDate(11, (java.sql.Date) stoplistRow.getBirthDate());
+                        java.sql.Date birth = null;
+                        if(stoplistRow.getBirthDate()!=null){
+                            birth = new java.sql.Date(stoplistRow.getBirthDate().getTime());
+                        }
+                        ps.setDate(11, birth);
                         if(stoplistRow.getInn()!=null){
                            ps.setBigDecimal(12, stoplistRow.getInn());
                         }else if(stoplistRow.getOkpo()!=null){
@@ -158,12 +190,17 @@ public class StoplistDaoImpl implements StoplistDao {
     @Override
     public StoplistRow editStoplistRow(StoplistRow stoplistRow) {
 
-        String innOrOkpo = stoplistRow.getStatus();
-
         boolean containInnOrOkpo = stoplistRow.getInn()!=null;
-        String QUERY = "update stoplist set fio=?, comment=?, codificator=?, edit_login_employee=?, " +
+        String QUERY = "update stoplist set edit_date=now(), fio=?, comment=?, codificator=?, edit_login_employee=?, " +
                 "create_company=?, created_department=?, source=?,  " +
                 "pasport_serial=?, pasport_number=?, birth_date=? ";
+
+
+        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
+
+        String userName = ((User)auth.getPrincipal()).getUsername();
+        Collection<GrantedAuthority> roles = ((User)auth.getPrincipal()).getAuthorities();
+
 
         int maxIndex = 10;
         if(containInnOrOkpo){
@@ -184,10 +221,8 @@ public class StoplistDaoImpl implements StoplistDao {
             QUERY = QUERY +", okpo=null, inn=null ";
         }
         QUERY = QUERY + " where id=? ";
-        System.out.println(QUERY);
-        Authentication auth =  SecurityContextHolder.getContext().getAuthentication();
 
-        String userName = ((User)auth.getPrincipal()).getUsername();
+
 
         try {
             String finalQUERY = QUERY;
@@ -197,14 +232,20 @@ public class StoplistDaoImpl implements StoplistDao {
                         PreparedStatement ps = conn.prepareStatement(finalQUERY);
                         ps.setString(1, stoplistRow.getFio());
                         ps.setString(2, stoplistRow.getComment());
-                        ps.setByte(3, stoplistRow.getCodificator());
+                        ps.setByte(3, stoplistRow.getCodificator().getCode());
                         ps.setString(4, userName);
                         ps.setString(5, stoplistRow.getCreateCompany());
                         ps.setString(6, stoplistRow.getCreateDepartment());
                         ps.setString(7, stoplistRow.getSource());
                         ps.setString(8, stoplistRow.getPasportSerial());
                         ps.setString(9, stoplistRow.getPasportNumber());
-                        ps.setDate(10, (java.sql.Date) stoplistRow.getBirthDate());
+
+                        java.sql.Date birth = null;
+                        if(stoplistRow.getBirthDate()!=null){
+                            birth = new java.sql.Date(stoplistRow.getBirthDate().getTime());
+                        }
+
+                        ps.setDate(10,  birth);
                         if(stoplistRow.getInn()!=null){
                             ps.setBigDecimal(11, stoplistRow.getInn());
                         }else if(stoplistRow.getOkpo()!=null){
@@ -222,8 +263,6 @@ public class StoplistDaoImpl implements StoplistDao {
         }
 
         try{
-            System.out.println(SELECT_STOPLIST+" where id=?");
-            System.out.println(stoplistRow.getId());
             return jdbcTemplate.queryForObject(SELECT_STOPLIST+" where id=?", new StoplistRowMapperImpl(),new Object[]{stoplistRow.getId()});
 
         }catch (Exception ex){
@@ -233,4 +272,67 @@ public class StoplistDaoImpl implements StoplistDao {
 
         return null;
     }
-}
+
+    private static  final String SELECT_CODIFICATORS = "select code, name from stoplist_codificators";
+
+    @Override
+    public List<Codificator> getListCodificators() {
+        try{
+            return jdbcTemplate.query(SELECT_CODIFICATORS, new CodificatorsRowMapperImpl());
+        }catch (Exception ex){
+            log.error("Error select getListCodificators : {}, {}", ExceptionUtils.getMessage(ex), ExceptionUtils.getMessage(ex.getCause()));
+        }
+        return null;
+    }
+
+    private static  final String SELECT_COMPANY = "select name from stoplist_company";
+
+    @Override
+    public List<String> getListCompany() {
+        try{
+            return jdbcTemplate.queryForList(SELECT_COMPANY, String.class);
+        }catch (Exception ex){
+            log.error("Error select getListCompany : {}, {}", ExceptionUtils.getMessage(ex), ExceptionUtils.getMessage(ex.getCause()));
+        }
+        return null;
+    }
+
+    private static  final String SELECT_DEPARTMENT = "select name from stoplist_department";
+    @Override
+    public List<String> getListDepartmnet() {
+        try{
+            return jdbcTemplate.queryForList(SELECT_DEPARTMENT, String.class);
+        }catch (Exception ex){
+            log.error("Error select getListDepartmnet : {}, {}", ExceptionUtils.getMessage(ex), ExceptionUtils.getMessage(ex.getCause()));
+        }
+        return null;
+    }
+
+    private static final String INSERT_CODIFICATOR =  "insert into stoplist_codificators (code, name) values (? , ?)";
+
+    @Override
+    public List<Codificator> insertStopCodificator(Codificator codificator) {
+        try{
+            int result = jdbcTemplate.update(INSERT_CODIFICATOR, new Object[]{codificator.getCode(), codificator.getName()});
+            if(result==1){
+                return getListCodificators();
+            }
+
+        }catch (Exception ex){
+            log.error("Error insertStopCodificator : {}, {}", ExceptionUtils.getMessage(ex), ExceptionUtils.getMessage(ex.getCause()));
+
+        }
+        return null;
+    }
+
+    private static final String SELECT_SOURCE =  "select name from stoplist_source";
+        @Override
+        public List<String> getListSources() {
+            try{
+                return jdbcTemplate.queryForList(SELECT_SOURCE, String.class);
+            }catch (Exception ex){
+                log.error("Error select getListSources : {}, {}", ExceptionUtils.getMessage(ex), ExceptionUtils.getMessage(ex.getCause()));
+            }
+            return null;
+        }
+    }

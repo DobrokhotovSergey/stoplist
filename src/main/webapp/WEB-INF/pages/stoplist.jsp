@@ -25,7 +25,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- AdminLTE Skins. We have chosen the skin-blue for this starter
           page. However, you can choose any other skin. Make sure you
           apply the skin class to the body tag so the changes take effect. -->
-	<link rel="stylesheet" href="resources/dist/css/skins/skin-blue.min.css">
+	<link rel="stylesheet" href="resources/dist/css/skins/_all-skins.min.css">
 
 
 	<link href="resources/nprogress/nprogress.css" rel="stylesheet">
@@ -42,7 +42,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<!-- Google Font -->
 	<link rel="stylesheet" href="resources/dist/css/google-font.css">
 	<link rel="stylesheet" href="resources/iCheck/all.css">
-	<link rel="stylesheet" href="resources/bootstrap-datepicker/css/bootstrap-datepicker.css">
+
+	<link rel="stylesheet" href="resources/bootstrap-datepicker/jquery-bootstrap.css">
+
+
+	<%--<link rel="stylesheet" href="resources/bootstrap-datepicker/styles-dropdown.css">--%>
 	<style>
 		.btn-search{
 			margin-right: 10px;
@@ -130,15 +134,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		</div>
 	</div>
 </div>
-
+<%--black-light--%>
+<sec:authorize access="hasRole('ROLE_RADMIN')">
 <body class="hold-transition skin-blue sidebar-mini">
+</sec:authorize>
+
+<sec:authorize access="hasRole('ROLE_SADMIN')">
+<body class="hold-transition skin-purple sidebar-mini">
+</sec:authorize>
+
+<sec:authorize access="hasRole('ROLE_SECURITY')">
+<body class="hold-transition skin-green sidebar-mini">
+</sec:authorize>
+
+<sec:authorize access="hasRole('ROLE_OPERATOR')">
+<body class="hold-transition skin-black-light sidebar-mini">
+</sec:authorize>
+
 <div class="wrapper">
 
 	<!-- Main Header -->
 	<header class="main-header">
 
 		<!-- Logo -->
-		<a href="index2.html" class="logo">
+		<a href="#" class="logo">
 			<!-- mini logo for sidebar mini 50x50 pixels -->
 			<span class="logo-mini"><b>S</b>L</span>
 			<!-- logo for regular state and mobile devices -->
@@ -166,7 +185,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						</a>
 						<ul class="dropdown-menu">
 							<!-- The user image in the menu -->
-							<li class="user-header">
+							<li class="user-header" style="height: auto">
 								<img src="/stoplist/getAvatar/${login}" onerror="this.src='/resources/project/images/admin.png'"  class="img-circle" alt="User Image">
 
 								<p>
@@ -174,9 +193,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								</p>
 							</li>
 							<li class="user-footer">
+								<sec:authorize access="hasRole('ROLE_RADMIN')">
 								<div class="pull-left">
 									<a  class="btn btn-primary btn-flat" onclick="getProfile();">Профиль</a>
 								</div>
+								</sec:authorize>
 								<div class="pull-right">
 									<a href="/logout" class="btn btn-primary btn-flat">Выйти</a>
 								</div>
@@ -213,7 +234,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<li class="treeview">
 				<li><a href="#tableStopList"><i class="fa fa-list"></i> <span>Единный стоплист</span></a></li>
 
-				<sec:authorize access="hasRole('ROLE_RADMIN') or hasRole('ROLE_SADMIN') or hasRole('ROLE_SADMIN')">
+				<sec:authorize access="hasRole('ROLE_RADMIN') or hasRole('ROLE_SADMIN') or hasRole('ROLE_SECURITY')">
+				<li><a href="#tableCodificator"><i class="fa fa-list"></i> <span>Кодификатор</span></a></li>
+				</sec:authorize>
+				<sec:authorize access="hasRole('ROLE_RADMIN') or hasRole('ROLE_SADMIN')">
+
 					<li class="header">Управление Пользователями</li>
 					<li><a href="#users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
 				</sec:authorize>
@@ -225,9 +250,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 	<!-- Content Wrapper. Contains page content -->
 	<div class="content-wrapper" id="spapp" role="main">
-		<section id="tableStopList" class="content container-fluid" data-load="tableStopList"></section>
-		<section id="error_404" class="content container-fluid"><h1>Page not found</h1></section>
 		<section id="users" class="content container-fluid" data-load="users"></section>
+
+
+		<section id="error_404" class="content container-fluid"><h1>Page not found</h1></section>
+			<section id="tableCodificator" class="content container-fluid" data-load="tableCodificator"></section>
+			<section id="tableStopList" class="content container-fluid" data-load="tableStopList"></section>
 
 	</div>
 	<!-- /.content-wrapper -->
@@ -297,7 +325,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="resources/singlePage/assets/js/jquery.spapp.js"></script>
 <script src="resources/singlePage/assets/js/custom.js"></script>
 <script src="resources/iCheck/icheck.min.js"></script>
-<script src="resources/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<%--<script src="resources/bootstrap-datepicker/bootstrap-datepicker.js"></script>--%>
+
+<script src="resources/jquery/jquery-ui.js"></script>
+<%--<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">--%>
+
+<script src="resources/bootstrap-datepicker/jquery.date-dropdowns.js"></script>
 <script src="resources/bootstrap-datepicker/locales/bootstrap-datepicker.ru.js"></script>
 <script>
     function getProfile(){
