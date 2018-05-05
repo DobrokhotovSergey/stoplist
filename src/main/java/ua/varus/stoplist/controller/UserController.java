@@ -9,13 +9,12 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import ua.varus.stoplist.domain.RoleName;
 import ua.varus.stoplist.domain.User;
 import ua.varus.stoplist.service.UserDetailsServiceImpl;
 import ua.varus.stoplist.service.UserService;
@@ -27,10 +26,9 @@ import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static ua.varus.stoplist.domain.RoleName.ROLE_RADM;
 
-
-@RestController
+@Controller
+@RequestMapping("/")
 public class UserController {
 
 	@Autowired
@@ -43,8 +41,8 @@ public class UserController {
 	private UserValidator userValidator;
 
 	@RequestMapping(value = {"/"}, method = RequestMethod.GET)
-	public ModelAndView defaultPage() {
-		return new ModelAndView("redirect:login");
+	public String defaultPage() {
+		return new String("redirect:login");
 	}
 
 	@Secured({"ROLE_RADMIN", "ROLE_SADMIN"})
@@ -63,6 +61,13 @@ public class UserController {
 	@RequestMapping(value = "/tableCodificator", method = RequestMethod.GET)
 	public ModelAndView tableCodificator(){
 		return new ModelAndView("tableCodificator");
+	}
+
+
+	@Secured({"ROLE_RADMIN", "ROLE_SADMIN", "ROLE_SECURITY", "ROLE_OPERATOR" })
+	@RequestMapping(value = "/tableDashboard", method = RequestMethod.GET)
+	public ModelAndView tableDashboard(){
+		return new ModelAndView("tableDashboard");
 	}
 
 
@@ -90,7 +95,7 @@ public class UserController {
 	@ResponseBody
 	public User createUser(@RequestBody User user, BindingResult bindingResult){
 
-        System.out.println("create users: " + user);
+//        System.out.println("create users: " + user);
 
 		userValidator.validate(user, bindingResult);
 		if(bindingResult.hasErrors()){

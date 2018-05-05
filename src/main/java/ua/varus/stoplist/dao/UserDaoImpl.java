@@ -2,7 +2,7 @@ package ua.varus.stoplist.dao;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.support.SqlLobValue;
 import org.springframework.jdbc.support.lob.DefaultLobHandler;
@@ -22,7 +22,7 @@ import static ua.varus.stoplist.dao.Constants.TABLE_USER_ROLES;
 @Slf4j
 public class UserDaoImpl implements UserDao {
 
-    @Autowired
+
     private JdbcTemplate jdbcTemplate;
 
     private static final String FIND_BY_USERNAME =
@@ -32,7 +32,11 @@ public class UserDaoImpl implements UserDao {
 
     private static final String GET_ALL_USERS =
             "select a.user_role_id, a.userName, a.role,b.password, b.enabled, b.firstname, b.lastname, b.position from "+
-            TABLE_USER_ROLES +" a join "+ TABLE_USERS +" b on a.userName = b.userName";
+            TABLE_USER_ROLES +" a join "+ TABLE_USERS +" b on a.userName = b.userName where a.role != 'ROLE_API' and enabled = 1";
+
+    public UserDaoImpl(@Qualifier("riski-postgresql")JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public User findByUserName(String username) {
@@ -40,7 +44,6 @@ public class UserDaoImpl implements UserDao {
         try{
             user = jdbcTemplate.queryForObject(FIND_BY_USERNAME, new UserRowMapperImpl(), username);
         }catch (Exception ex){
-            System.out.println(ex);
             log.error("Error findByUsername : {}, {}", ExceptionUtils.getMessage(ex), ExceptionUtils.getMessage(ex.getCause()));
         }
         return user;
@@ -49,6 +52,7 @@ public class UserDaoImpl implements UserDao {
     private static final String CREATE_USER = "insert into "+ TABLE_USERS +
             "(username,password,position,enabled,firstname,lastname) values(?,?,?,?,?,?); insert into "+
             TABLE_USER_ROLES+"(username, role) values(?,?)";
+
     @Override
     public User createUser(User user) {
         try{
@@ -77,7 +81,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public byte[] getAvatar(String userName) {
-        System.out.println(userName);
+//        System.out.println(userName);
         try {
             byte[] image = jdbcTemplate.queryForObject(GET_AVATAR, (rs, rowNum) -> rs.getBytes(1), userName);
             return image;

@@ -1,14 +1,12 @@
 package ua.varus.stoplist.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @Builder
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Codificator {
     private byte code;
     private String name;

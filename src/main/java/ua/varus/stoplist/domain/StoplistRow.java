@@ -1,10 +1,10 @@
 package ua.varus.stoplist.domain;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import lombok.*;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import ua.varus.stoplist.domain.custom.LocalDateTimeSerializer;
 
 import java.math.BigDecimal;

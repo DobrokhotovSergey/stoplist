@@ -11,7 +11,6 @@ import java.util.Date;
 @Builder
 public class User {
     private String username;
-//    @JsonIgnore
     private String password;
     private String position;
     private String firstname;

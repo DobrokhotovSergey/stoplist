@@ -55,7 +55,7 @@ public class StoplistRowMapperImpl implements RowMapper<StoplistRow> {
                 .editLoginEmployee(rs.getString("edit_login_employee"))
                 .createCompany(rs.getString("create_company"))
                 .createDepartment(rs.getString("created_department"))
-                .source(s2.getSource())
+                .source(rs.getString("source"))
                 .build();
 
         return stoplistRow;

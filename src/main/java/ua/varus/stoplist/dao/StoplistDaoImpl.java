@@ -3,6 +3,7 @@ package ua.varus.stoplist.dao;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -14,9 +15,9 @@ import org.springframework.stereotype.Repository;
 import ua.varus.stoplist.domain.Codificator;
 import ua.varus.stoplist.domain.StoplistRow;
 import ua.varus.stoplist.domain.StoplistSearchForm;
+import ua.varus.stoplist.domain.search.SearchPhys;
 import ua.varus.stoplist.jdbc.CodificatorsRowMapperImpl;
 import ua.varus.stoplist.jdbc.StoplistOperatorRowMapperImpl;
-import ua.varus.stoplist.jdbc.StoplistRiskAdminRowMapperImpl;
 import ua.varus.stoplist.jdbc.StoplistRowMapperImpl;
 import ua.varus.stoplist.service.UserService;
 
@@ -29,7 +30,7 @@ import java.util.List;
 @Slf4j
 public class StoplistDaoImpl implements StoplistDao {
 
-    @Autowired
+
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -39,23 +40,60 @@ public class StoplistDaoImpl implements StoplistDao {
             "pasport_number, create_date, edit_date, status, remove_date, comment, c.code as codificator_code, c.name as codificator_name, create_login_employee," +
             "edit_login_employee, create_company, created_department, source FROM stoplist t join stoplist_codificators c on t.codificator = c.code ";
 
-    ;
+    public StoplistDaoImpl(@Qualifier("riski-postgresql")JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
 
     @Override
     public List<StoplistRow> getList(StoplistSearchForm searchForm) {
+
         String QUERY = " where status = 'A' and ";
         List<Object> listObject = new ArrayList<>();
-        if(!"".equals(searchForm.getInn())){
-            QUERY += "inn = ?::decimal(10) and ";
-            listObject.add(searchForm.getInn());
-        }
-        if(!"".equals(searchForm.getFio())){
-            QUERY += "upper(fio) = ? and ";
-            listObject.add(searchForm.getFio().toUpperCase());
-        }
-        if(searchForm.getBirtdate() != null){
-            QUERY += "birth_date = ? and ";
-            listObject.add(searchForm.getBirtdate());
+
+        if("jur".equals(searchForm.getSubject())){
+
+            if(!"".equals(searchForm.getSearchJur().getName())){
+                QUERY += "upper(fio) = ? and ";
+                listObject.add(searchForm.getSearchJur().getName().toUpperCase());
+            }
+            if(!"".equals(searchForm.getSearchJur().getOkpo())){
+                QUERY += "okpo = ?::decimal(8) and ";
+                listObject.add(searchForm.getSearchJur().getOkpo());
+            }
+
+        }else if("phys".equals(searchForm.getSubject())){
+            SearchPhys searchPhys = searchForm.getSearchPhys();
+            if(!"".equals(searchPhys.getLastName())){
+                String fio = searchPhys.getLastName().trim();
+                int index = 1;
+                QUERY += "upper(split_part(fio, ' ', "+index+")";
+                if(!"".equals(searchPhys.getFirstName())){
+                    fio +=" "+searchPhys.getFirstName().trim();
+                    index = 2;
+                    QUERY += "||' '||split_part(fio, ' ', "+index+")";
+
+                }
+                if(!"".equals(searchPhys.getSurName())){
+                    fio +=" "+searchPhys.getSurName().trim();
+                    index = 3;
+                    QUERY += "||' '||split_part(fio, ' ', "+index+")";
+
+                }
+                QUERY += ") = upper(?) and ";
+                listObject.add(fio);
+            }
+
+
+            if(!"".equals(searchPhys.getInn())){
+                QUERY += "inn = ?::decimal(10) and ";
+                listObject.add(searchPhys.getInn());
+            }
+            if(searchPhys.getBirthdate()!=null){
+                QUERY += "birth_date = ? and ";
+                listObject.add(searchPhys.getBirthdate());
+            }
+
         }
 
 
@@ -74,20 +112,16 @@ public class StoplistDaoImpl implements StoplistDao {
             if("ROLE_OPERATOR".equals(a)){
 
                 list = jdbcTemplate.query(SELECT_STOPLIST+QUERY, new StoplistOperatorRowMapperImpl(),
-                        listObject.stream().toArray(String[]::new));
+                        listObject.stream().toArray());
 
             }else if("ROLE_RADMIN".equals(a)){
                 list = jdbcTemplate.query(SELECT_STOPLIST+QUERY, new StoplistRowMapperImpl(),
-                        listObject.stream().toArray(String[]::new));
+                        listObject.stream().toArray());
             }
             else{
                     list = jdbcTemplate.query(SELECT_STOPLIST+QUERY, new StoplistRowMapperImpl(),
-                            listObject.stream().toArray(String[]::new));
+                            listObject.stream().toArray());
             }
-
-
-
-
 
             return list;
 

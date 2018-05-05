@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
                     emp.setOnline(true);
                 }
             }
+            emp.setPassword("");
         }
         return list;
     }
@@ -120,6 +121,8 @@ public class UserServiceImpl implements UserService {
                 return true;
             }else if("ROLE_SADMIN".equals(roleInitiator) && "ROLE_SADMIN".equals(roleEdit)){
                 return false;
+            }else if("ROLE_SADMIN".equals(roleInitiator) && "ROLE_RADMIN".equals(roleEdit)){
+                return false;
             }else if("ROLE_RADMIN".equals(roleInitiator) || "ROLE_SADMIN".equals(roleInitiator)){
                 return true;
             }
@@ -135,7 +138,6 @@ public class UserServiceImpl implements UserService {
            killSessionUser(user.getUsername());
            return userDao.deleteUser(user);
         }
-
         return false;
     }
 
