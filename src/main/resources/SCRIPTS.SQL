@@ -122,3 +122,13 @@ insert into stoplist_source values('Заключения расследован�
 insert into stoplist_source values('Базы МВД');
 insert into stoplist_source values('Открытые реестры');
 insert into stoplist_source values('Полиграфологические тесты');
+
+
+
+select Left(a[1], 1) as lastName, Left(a[2], 1) as firstName, Left(a[3], 1) as surName, birth_date, COUNT(*)
+from (
+       select  (regexp_split_to_array(BTRIM(fio), '\s+')), birth_date from stoplist
+     ) as dt(a)
+GROUP BY lastName, firstName,surName, birth_date
+HAVING
+  COUNT(*) > 1
