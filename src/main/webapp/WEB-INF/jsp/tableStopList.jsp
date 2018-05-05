@@ -12,29 +12,21 @@
             <div class="modal-body">
                 <form id="searchStoplist-form" class="form-horizontal form-label-left">
                     <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">ИНН/ОКПО
-                        </label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Субьект<span class="required">*</span></label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="inn-search" type="text" name="inn" required title="введите 8 цифр для ОКПО или 10 цифр для ИНН" pattern="\d{8}|\d{10}" class="form-control col-md-7 col-xs-12" />
+                            <label class="radio-inline">
+                                физ лицо:
+                                <input type="radio" class="flat-red radio-inline" name="subject" required id="phys-search" value="phys">
+                            </label>
+                            <label class="radio-inline">
+                                юр лицо:
+                                <input type="radio" class="flat-red radio-inline" name="subject" id="jur-search" value="jur">
+                            </label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">ФИО / Название юрлица
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="fio-search" name="fio" required class="form-control col-md-7 col-xs-12"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">дата рождения
-                        </label>
-
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input id="birthdate-search" name="birthdate" class="form-control col-md-7 col-xs-12 datepicker"/>
-                        </div>
-                    </div>
+                    <div id="searchStoplist-content"></div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        <%--<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>--%>
                         <input type="submit" value="Найти" class="btn btn-success" id="searchStoplist-submit"/>
                     </div>
                 </form>
@@ -62,7 +54,7 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                <%--<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>--%>
                 <button type="submit" class="btn btn-success" id="deleteStoplist-submit">Подтвердить</button>
             </div>
 
@@ -80,13 +72,12 @@
             </div>
             <div class="modal-body">
                 <form id="stoplist-form" data-parsley-validate class="form-horizontal form-label-left">
-
-                        <div class="form-group">
+                    <div class="form-group">
                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phys-add">Субьект<span class="required">*</span></label>
                             <div class="col-md-6 col-sm-6 col-xs-12">
                                 <label class="radio-inline">
                                     физ лицо:
-                                    <input type="radio" class="flat-red radio-inline" name="status" id="phys-add" value="phys" checked>
+                                    <input type="radio" class="flat-red radio-inline" name="status" id="phys-add" value="phys" required>
                                 </label>
                                 <label class="radio-inline">
                                     юр лицо:
@@ -94,42 +85,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-add">ИНН/ОКПО
-                            </label>
-                            <div class="col-md-6 col-sm-6 col-xs-12" >
-                                <input id="inn-add" name="inn" class="form-control col-md-7 col-xs-12">
-                            </div>
-                        </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fio-add">ФИО / Название юрлица<span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text"  id="fio-add" name="fio" required class="form-control col-md-7 col-xs-12">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthdate-add">Дата рождения
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="birthdate-add" name="birthDate" data-date-format="yyyy-mm-dd" class="form-control col-md-7 col-xs-12 datepicker">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pasportSerial-add">Серия паспорта
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="pasportSerial-add" name="pasportSerial"  class="form-control col-md-7 col-xs-12">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pasportNumber-add">Номер паспорта
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="pasportNumber-add" name="pasportNumber" class="form-control col-md-7 col-xs-12">
-                        </div>
-                    </div>
+                    <div id="addStoplist-content"></div>
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comment-add">Комментарий<span class="required">*</span>
                         </label>
@@ -167,7 +123,7 @@
                         <div id="source-select"></div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        <%--<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>--%>
                         <button type="submit" class="btn btn-success" id="addStoplist-submit">Добавить</button>
                     </div>
                 </form>
@@ -200,50 +156,15 @@
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <label class="radio-inline">
                                 физ лицо:
-                                <input type="radio" class="flat-red radio-inline" name="status" id="phys-edit" value="phys" checked required="required">
+                                <input type="radio" class="flat-red radio-inline" name="status" id="phys-edit" value="phys" required>
                             </label>
                             <label class="radio-inline">
                                 юр лицо:
-                                <input type="radio" class="flat-red radio-inline" name="status" id="jur-edit" value="jur" required="required">
+                                <input type="radio" class="flat-red radio-inline" name="status" id="jur-edit" value="jur">
                             </label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-add">ИНН/ОКПО
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12" >
-                            <input id="inn-edit" name="inn" class="form-control col-md-7 col-xs-12">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fio-add">ФИО / Название юрлица<span class="required">*</span>
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text"  id="fio-edit" name="fio" required class="form-control col-md-7 col-xs-12">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthdate-add">Дата рождения
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="birthdate-edit" name="birthDate" data-date-format="yyyy-mm-dd" class="form-control col-md-7 col-xs-12 datepicker">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pasportSerial-add">Серия паспорта
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="pasportSerial-edit" name="pasportSerial"  class="form-control col-md-7 col-xs-12">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pasportNumber-add">Номер паспорта
-                        </label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <input type="text" id="pasportNumber-edit" name="pasportNumber" class="form-control col-md-7 col-xs-12">
-                        </div>
-                    </div>
+                    <div id="editStoplist-content"></div>
                 <sec:authorize access="hasRole('ROLE_RADMIN') or hasRole('ROLE_SADMIN') or hasRole('ROLE_SECURITY')">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="comment-add">Комментарий<span class="required">*</span>
@@ -287,7 +208,7 @@
                         <%--</div>--%>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        <%--<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>--%>
                         <button type="submit" class="btn btn-success" id="editStoplist-submit">ОК</button>
                     </div>
                 </form>
@@ -312,8 +233,17 @@
     </div>
     <div class="box-body">
         <div class="x_content">
+
+
+            <%--<i class="fa fa-plus" id="addStoplist-btn" style="color:white"></i><span style="color:white"> Внести запись </span>--%>
+
+
             <div class="table-responsive">
                 <table id="stoplist-table" class="table no-margin" style="width: 100%">
+                    <sec:authorize access="hasRole('ROLE_RADMIN') or hasRole('ROLE_SADMIN') or hasRole('ROLE_SECURITY')">
+                        <a id="addStoplist-btn" style="float: left" class="dt-button btn btn-success btn-search" tabindex="0" aria-controls="stoplist-table"><span><i style="color:white"></i><span style="color:white"> Внести запись </span></span></a>
+                        <%--<div class="dt-buttons"><button class="fa fa-plus dt-button btn btn-success btn-search" id="addStoplist-btn" style="float: left" >Внести запись</button></div>--%>
+                    </sec:authorize>
                     <thead>
                     <tr>
                         <th>id</th>
@@ -348,17 +278,9 @@
     </div>
 </div>
 
-<%--<div class="form-group">--%>
-    <%--<label class="control-label col-md-3 col-sm-3 col-xs-12" for="codificator-add">Кодификатор стоп-листа<span class="required">*</span>--%>
-    <%--</label>--%>
-    <%--<div class="col-md-6 col-sm-6 col-xs-12">--%>
-        <%----%>
-    <%--</div>--%>
-<%--</div>--%>
-
-
 <script>
-    $(function () {
+  function initializeDatepicker() {
+
         var initDate = new Date();
         initDate.setFullYear(initDate.getFullYear() - 35);
         initDate.setMonth(1-1);
@@ -367,32 +289,202 @@
         $('.datepicker').datepicker({
             changeMonth: true,
             changeYear: true,
-//            yearRange: "1930:2017",
             yearRange: "-80:-1",
             dateFormat: "yy-mm-dd",
             maxDate: '-1D',
             defaultDate: initDate,
         });
 
-//        ui-datepicker-year
-    });
+    };
+  initializeDatepicker();
 
-    jQuery(function ($) {
-        var $inputs = $('#inn-search,#fio-search');
-        $inputs.on('input', function () {
-            // Set the required property of the other input to false if this input is not empty.
-            $inputs.not(this).prop('required', !$(this).val().length);
+
+    var searchPhysHtml = '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">ИНН\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input id="inn-search" type="text" name="inn" required title="введите 10 цифр" pattern="\\d{10}" class="form-control col-md-7 col-xs-12" />\n' +
+        '</div>\n' +
+        '</div>'+
+        '</div>\n'+
+        '</div>'+
+        '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">Фамилия\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input id="lastName-search" type="text" name="lastName" required class="form-control col-md-7 col-xs-12" />\n' +
+        '</div>\n' +
+        '</div>'+
+        '</div>\n'+
+        '</div>'+
+        '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">Имя\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input id="firstName-search" type="text" name="firstName" class="form-control col-md-7 col-xs-12" />\n' +
+        '</div>\n' +
+        '</div>'+
+        '</div>\n'+
+        '</div>'+
+        '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">Отчество\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input id="surName-search" type="text" name="surName" class="form-control col-md-7 col-xs-12" />\n' +
+        '</div>\n' +
+        '</div>'+
+        '</div>\n'+
+        '</div>'+
+        '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">дата рождения\n' +
+        '</label>\n' +
+        '\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input id="birthdate-search" name="birthdate" class="form-control col-md-7 col-xs-12 datepicker"/>\n' +
+        '</div>\n' +
+        '</div>';
+
+    var searchJurHtml = '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">ОКПО\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input id="okpo-search" type="text" name="okpo" required title="введите 8 цифр" pattern="\\d{8}" class="form-control col-md-7 col-xs-12" />\n' +
+        '</div>\n' +
+        '</div>'+
+        '</div>\n'+
+        '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-search">Название юрлица\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input type="text" id="name-search" name="name" required class="form-control col-md-7 col-xs-12"/>\n' +
+        '</div>\n' +
+        '</div>\n';
+
+
+
+    $('#phys-search').on('ifChecked', function(event){
+        $('#searchStoplist-content').html(searchPhysHtml);
+        initializeDatepicker();
+        jQuery(function ($) {
+            var $inputs = $('#inn-search,#lastName-search');
+            $inputs.on('input', function () {
+                $inputs.not(this).prop('required', !$(this).val().length);
+            });
         });
     });
+    $('#jur-search').on('ifChecked', function(event){
+        $('#searchStoplist-content').html(searchJurHtml);
+        jQuery(function ($) {
+            var $inputs = $('#okpo-search,#name-search');
+            $inputs.on('input', function () {
+                $inputs.not(this).prop('required', !$(this).val().length);
+            });
+        });
+    });
+
+    var addPhysHtml = '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-add">ИНН\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12" >\n' +
+        '<input id="inn-add2" name="inn" class="inn-add form-control col-md-7 col-xs-12">\n' +
+        '</div>\n' +
+        '</div>\n' +
+        ' <div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="lastname-add">Фамилия<span class="required">*</span>\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input type="text"  id="lastname-add" name="lastname" required class="form-control col-md-7 col-xs-12">\n' +
+        '</div>\n' +
+        '</div>\n' +
+        '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="firstname-add">Имя<span class="required">*</span>\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input type="text" id="firstname-add" name="firstname" required class="form-control col-md-7 col-xs-12">\n' +
+        '</div>\n' +
+        '</div>\n' +
+        '<div class="form-group">\n' +
+        '<label class="control-label col-md-3 col-sm-3 col-xs-12" for="surname-add">Отчество<span class="required">*</span>\n' +
+        '</label>\n' +
+        '<div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '<input type="text"  id="surname-add" name="surname" required class="form-control col-md-7 col-xs-12">\n' +
+        '</div>\n' +
+        '</div>\n' +
+        '<div class="form-group">\n' +
+        '  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthdate-add">Дата рождения\n' +
+        '  </label>\n' +
+        '  <div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '  <input type="text" id="birthdate-add" name="birthDate" data-date-format="yyyy-mm-dd" class="form-control col-md-7 col-xs-12 datepicker">\n' +
+        '  </div>\n' +
+        '  </div>\n' +
+        '  <div class="form-group">\n' +
+        '  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pasportSerial-add">Серия паспорта\n' +
+        '  </label>\n' +
+        '  <div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '  <input type="text" id="pasportSerial-add" name="pasportSerial"  class="form-control col-md-7 col-xs-12">\n' +
+        '  </div>\n' +
+        '  </div>\n' +
+        '  <div class="form-group">\n' +
+        '  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="pasportNumber-add">Номер паспорта\n' +
+        '  </label>\n' +
+        '  <div class="col-md-6 col-sm-6 col-xs-12">\n' +
+        '  <input type="text" id="pasportNumber-add" name="pasportNumber" class="form-control col-md-7 col-xs-12">\n' +
+        '  </div>\n' +
+        '  </div>';
+
+
+var addJurHtml = '<div class="form-group">\n' +
+    '  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="inn-add">ОКПО\n' +
+    '  </label>\n' +
+    '  <div class="col-md-6 col-sm-6 col-xs-12" >\n' +
+    '  <input id="inn-add" name="inn" class="inn-add form-control col-md-7 col-xs-12">\n' +
+    '  </div>\n' +
+    '  </div>\n' +
+    '  <div class="form-group">\n' +
+    '  <label class="control-label col-md-3 col-sm-3 col-xs-12" for="fio-add">Имя Юрлица<span class="required">*</span>\n' +
+    '  </label>\n' +
+    '  <div class="col-md-6 col-sm-6 col-xs-12">\n' +
+    '  <input type="text"  id="fio-add" name="fio" required class="form-control col-md-7 col-xs-12">\n' +
+    '  </div>\n' +
+    '  </div>';
+
+    //addStoplist-content
+
+  $('#phys-add').on('ifChecked', function(event){
+      $('#addStoplist-content').html(addPhysHtml);
+      initializeDatepicker();
+  });
+
+  $('#jur-add').on('ifChecked', function(event){
+      $('#addStoplist-content').html(addJurHtml);
+  });
+
+
+  //
+  $('#jur-edit').on('ifChecked', function(event){
+      $('#editStoplist-content').html(addJurHtml);
+  });
+
+  $('#phys-edit').on('ifChecked', function(event){
+      $('#editStoplist-content').html(addPhysHtml);
+  });
+
+
 
     $('#addStoplist-submit').click(function(e){
 
         var codificatorSelected = $('#codificator-select-add option:selected', '#stoplist-form').val();
         var radioButtonSelected = $('input[name=status]:checked', '#stoplist-form').val();
 
+        $('#inn-add').removeAttr('required');
+        $('#inn-add').removeAttr('title');
+        $('#inn-add2').removeAttr('required');
+        $('#inn-add2').removeAttr('title');
+
+
         if(radioButtonSelected=='phys'){
-            $('#inn-add').attr('pattern', '\\d{10}');
-            $('#inn-add').attr('title', 'введите 10 цифр для ИНН');
+            $('#inn-add2').attr('pattern', '\\d{10}');
+            $('#inn-add2').attr('title', 'введите 10 цифр для ИНН');
         }else if(radioButtonSelected=='jur') {
             $('#inn-add').attr('pattern', '\\d{8}');
             $('#inn-add').attr('title', 'введите 8 цифр для ОКПО');
@@ -404,10 +496,11 @@
                 $('#phys-add').iCheck('check');
                 $('#jur-add').iCheck('uncheck');
             }
-            $('#inn-add').attr('required', 'required');
+            $('#inn-add2').attr('required', 'required');
         }
         else if(codificatorSelected == 4){
             $('#inn-add').attr('required', 'required');
+            $('#inn-add2').attr('required', 'required');
         }
 
         var $theForm = $('#stoplist-form');
@@ -418,7 +511,12 @@
         }
         if(check){
             var form = $('#stoplist-form').serializeObject();
-
+            if(radioButtonSelected=='phys'){
+                form['fio'] = form['lastname'] +' '+form['firstname'] +' ' + form['surname'];
+                delete form['lastname'];
+                delete form['firstname'];
+                delete form['surname'];
+            }
 
             // form[codificator[]] = $("#codificator-select-add option:selected" ).val();
             var cc = {};
@@ -427,14 +525,14 @@
 
             form['createCompany'] = $("#company-select-add option:selected" ).val();
             form['createDepartment'] = $("#department-select-add option:selected" ).val();
+            form['source'] = $("#source-select-add option:selected" ).val();
 
-            console.log(JSON.stringify(form));
             $('#addStoplist-modal').modal('hide');
 
             //
             $.ajax({
                 type: "post",
-                url: "/stoplist/ajax/insertStopList",
+                url: "stoplist/ajax/insertStopList",
                 dataType: 'json',
                 data:JSON.stringify(form),
                 contentType: "application/json; charset=utf-8",
@@ -459,9 +557,9 @@
                 },
                 error: function (xhr, status, error) {
                     notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-                    console.log(xhr);
-                    console.log(status);
-                    console.log(error);
+                    if(xhr.responseJSON.status == 405){
+                        $('#error-modal').modal('show');
+                    }
                 }
             });
         }
@@ -471,8 +569,17 @@
 
     });
 
+
+  $('#addStoplist-btn').on('click', function(){
+      $('#addStoplist-modal').modal('show');
+      $('#stoplist-form').get(0).reset();
+      $('#phys-add').iCheck('check');
+      $('#jur-add').iCheck('uncheck');
+  });
+
     var tableStopList = $('#stoplist-table').DataTable({
         destroy: true,
+        "searching": false,
         // dom: '<<rB><lf><t>ip>',
         dom: '<Blf<t>ip>',
         columnDefs: [ {
@@ -493,14 +600,16 @@
                 action: function () {
                     $('#searchStoplist-modal').modal('show');
                     return false;
-                }},
-            {
-                className: "btn btn-success",
-                text: '<i class="fa fa-plus" id="addStoplist-btn" style="color:white"></i><span style="color:white"> Внести запись </span>',
-                action: function () {
-                    $('#addStoplist-modal').modal('show');
-                    return false;
-                }}],
+                }
+                },
+            // {
+                <%--className: "btn btn-success",--%>
+                <%--text: '<sec:authorize access="hasRole(\'ROLE_SADMIN\')"><i class="fa fa-plus" id="addStoplist-btn" style="color:white"></i><span style="color:white"> Внести запись </span></sec:authorize>',--%>
+                <%--action: function () {--%>
+                    <%--$('#addStoplist-modal').modal('show');--%>
+                    <%--return false;--%>
+                <%--}}--%>
+                ],
         language: {
             url: "resources/datatables.net/Russian.json"
         },
@@ -513,17 +622,29 @@
 //       }
 //        setTimeout(test, 12000);
         $("#addStoplist-submit" ).attr('disabled', false);
+        $("#editStoplist-submit" ).attr('disabled', false);
 
     });
-function ajaxDrawSelect(company, department, codificator, source){
+
+
+
+function ajaxDrawSelect(company, department, codificator, source, data){
+
+
     $("#addStoplist-submit" ).attr('disabled', true);
+    $("#editStoplist-submit" ).attr('disabled', true);
+
+    $('#phys-add').iCheck('uncheck');
+    $('#jur-add').iCheck('uncheck');
+    $('#addStoplist-content').html('');
+
     $('#'+company).html('');
     $('#'+department).html('');
     $('#'+codificator).html('');
     $('#'+source).html('');
     $.ajax({
         type: "post",
-        url: "/stoplist/ajax/getListCodificators",
+        url: "stoplist/ajax/getListCodificators",
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (item) {
@@ -534,15 +655,30 @@ function ajaxDrawSelect(company, department, codificator, source){
 
             var codficatorSelect = '<div class="col-md-6 col-sm-6 col-xs-12"><select class="form-control" id="'+codificator+'-add">\n' +
                 tepHtmlSelect +
-                '</select></div>'
-            $('#'+codificator).html(codficatorSelect);
+                '</select></div>';
 
-            $('#codificator-select-add').on('change', function() {
+            $('#'+codificator).html(codficatorSelect);
+            if(data!=undefined) {
+                var valofText = $("#" +codificator+ "-add option").filter(function() {
+                    return this.text == data[12]
+                }).val();
+                $('#'+codificator+'-add').val(valofText);
+            }
+
+            $('#'+codificator+'-add').on('change', function() {
                 var val = this.value;
                 if(val != 1 && val !=3 && val !=4){
 //                    $('#inn-add').removeAttr('pattern');
-                    $('#inn-add').removeAttr('required');
-                    $('#inn-add').removeAttr('title');
+                    if(data==undefined){
+                        $('#inn-add').removeAttr('required');
+                        $('#inn-add').removeAttr('title');
+                        $('#inn-add2').removeAttr('required');
+                        $('#inn-add2').removeAttr('title');
+                    }else{
+                        $('#inn-edit').removeAttr('required');
+                        $('#inn-edit').removeAttr('title');
+                    }
+
                 }
 
             });
@@ -559,15 +695,15 @@ function ajaxDrawSelect(company, department, codificator, source){
         },
         error: function (xhr, status, error) {
             notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-            console.log(xhr);
-            console.log(status);
-            console.log(error);
+            if(xhr.responseJSON.status == 405){
+                $('#error-modal').modal('show');
+            }
         }
     });
 
     $.ajax({
         type: "post",
-        url: "/stoplist/ajax/getListCompany",
+        url: "stoplist/ajax/getListCompany",
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (item) {
@@ -579,7 +715,16 @@ function ajaxDrawSelect(company, department, codificator, source){
             var companySelect = '<div class="col-md-6 col-sm-6 col-xs-12"><select class="form-control" id="'+company+'-add">\n' +
                                 tepHtmlSelect +
                                 '</select></div>';
+
             $('#'+company).html(companySelect);
+            if(data!=undefined){
+                var valofText = $("#" +company+ "-add option").filter(function() {
+                    return this.text == data[15]
+                }).val();
+                $('#'+company+'-add').val(valofText);
+            }
+
+
         },
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
@@ -592,14 +737,14 @@ function ajaxDrawSelect(company, department, codificator, source){
         },
         error: function (xhr, status, error) {
             notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-            console.log(xhr);
-            console.log(status);
-            console.log(error);
+            if(xhr.responseJSON.status == 405){
+                $('#error-modal').modal('show');
+            }
         }
     });
     $.ajax({
         type: "post",
-        url: "/stoplist/ajax/getListDepartment",
+        url: "stoplist/ajax/getListDepartment",
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (item) {
@@ -612,6 +757,14 @@ function ajaxDrawSelect(company, department, codificator, source){
                 tepHtmlSelect +
                 '</select></div>';
             $('#'+department).html(companySelect);
+            if(data!=undefined) {
+                var valofText = $("#" +department+ "-add option").filter(function() {
+                    return this.text == data[16]
+                }).val();
+                $('#'+department+'-add').val(valofText);
+
+            }
+
         },
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
@@ -624,14 +777,14 @@ function ajaxDrawSelect(company, department, codificator, source){
         },
         error: function (xhr, status, error) {
             notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-            console.log(xhr);
-            console.log(status);
-            console.log(error);
+            if(xhr.responseJSON.status == 405){
+                $('#error-modal').modal('show');
+            }
         }
     });
     $.ajax({
         type: "post",
-        url: "/stoplist/ajax/getListSources",
+        url: "stoplist/ajax/getListSources",
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (item) {
@@ -644,6 +797,12 @@ function ajaxDrawSelect(company, department, codificator, source){
                 tepHtmlSelect +
                 '</select></div>';
             $('#'+source).html(companySelect);
+            if(data!=undefined) {
+                var valofText = $("#" +source+ "-add option").filter(function() {
+                    return this.text == data[17]
+                }).val();
+                $('#'+source+'-add').val(valofText);
+            }
         },
         beforeSend: function(xhr) {
             xhr.setRequestHeader(header, token);
@@ -656,9 +815,9 @@ function ajaxDrawSelect(company, department, codificator, source){
         },
         error: function (xhr, status, error) {
             notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-            console.log(xhr);
-            console.log(status);
-            console.log(error);
+            if(xhr.responseJSON.status == 405){
+                $('#error-modal').modal('show');
+            }
         }
     });
 }
@@ -668,53 +827,88 @@ function ajaxDrawSelect(company, department, codificator, source){
         ajaxDrawSelect('company-select', 'department-select', 'codificator-select', 'source-select');
 
     });
-    $(document).on('show.bs.modal','#editStoplist-modal', function (e) {
-        ajaxDrawSelect('company-select-ed', 'department-select-ed', 'codificator-select-ed', 'source-select-ed');
-    });
+    // $(document).on('show.bs.modal','#editStoplist-modal', function (e) {
+    //     ajaxDrawSelect('company-select-ed', 'department-select-ed', 'codificator-select-ed', 'source-select-ed');
+    // });
+
 
 
     $('#stoplist-table tbody').on('click', 'tr td .edit-stoplist', function(){
+
         $('#editStoplist-modal').modal('show');
+        $('#editStoplist-form').get(0).reset();
+
 
         var data = tableStopList.row( $(this).parents('tr') ).data();
         var position = tableStopList.cell($(this).parents('td') ).index().row;
-        console.log(data);
+
+        ajaxDrawSelect('company-select-ed', 'department-select-ed', 'codificator-select-ed', 'source-select-ed', data);
+        // console.log(data);
 
         $('#id-stoplist-edit').text(data[0]);
         $('#pos-stoplist-edit').text(position);
 
+        if(data[1]!=null || (data[1]==null && data[2]==null)){
+            $('#editStoplist-modal').on('shown.bs.modal', function (e) {
+                $('.inn-add').val(data[1]);
+                e.preventDefault();
+                return false;
+            });
 
-        if(data[1]!=null){
-            $('#inn-edit').val(data[1]);
             $('#phys-edit').iCheck('check');
             $('#jur-edit').iCheck('uncheck');
+
+            var fio = data[3].split(' ');
+
+            var lastname = fio[0];
+            var firstName = fio[1];
+            var surName = fio[2];
+
+            $('#lastname-add').val(lastname);
+            $('#firstname-add').val(firstName);
+            $('#surname-add').val(surName);
+
         }
+
         if(data[2]!=null){
             $('#inn-edit').val(data[2]);
             $('#phys-edit').iCheck('uncheck');
             $('#jur-edit').iCheck('check');
+
+            $('#fio-add').val(data[3]);
         }
-        $('#fio-edit').val(data[3]);
-        $('#birthdate-edit').val(data[4]);
-        $('#pasportSerial-edit').val(data[5]);
-        $('#pasportNumber-edit').val(data[6]);
+
+
+        $('#birthdate-add').val(data[4]);
+        $('#pasportSerial-add').val(data[5]);
+        $('#pasportNumber-add').val(data[6]);
         $('#comment-edit').val(data[11]);
-        $('#codificator-edit').val(data[12]);
-        $('#company-edit').val(data[15]);
-        $('#department-edit').val(data[16]);
-        $('#source-edit').val(data[17]);
 
     });
 
     $('#editStoplist-submit').click(function(e){
-
+        var codificatorSelected = $('#codificator-select-edit option:selected', '#editStoplist-form').val();
         var radioButtonSelected = $('input[name=status]:checked', '#editStoplist-form').val();
+
         if(radioButtonSelected=='phys'){
-            $('#inn-edit').attr('pattern', '\\d{10}');
-            $('#inn-edit').attr('title', 'введите 10 цифр для ИНН');
+            $('#inn-add2').attr('pattern', '\\d{10}');
+            $('#inn-add2').attr('title', 'введите 10 цифр для ИНН');
         }else if(radioButtonSelected=='jur') {
-            $('#inn-edit').attr('pattern', '\\d{8}');
-            $('#inn-edit').attr('title', 'введите 8 цифр для ОКПО');
+            $('#inn-add').attr('pattern', '\\d{8}');
+            $('#inn-add').attr('title', 'введите 8 цифр для ОКПО');
+        }
+
+
+        if(codificatorSelected == 1 || codificatorSelected == 3){
+            if(radioButtonSelected=='jur'){
+                $('#phys-edit').iCheck('check');
+                $('#jur-edit').iCheck('uncheck');
+            }
+            $('#inn-add2').attr('required', 'required');
+        }
+        else if(codificatorSelected == 4){
+            $('#inn-add').attr('required', 'required');
+            $('#inn-add2').attr('required', 'required');
         }
 
         var $theForm = $('#editStoplist-form');
@@ -725,6 +919,14 @@ function ajaxDrawSelect(company, department, codificator, source){
         }
         if(check){
             var form = $('#editStoplist-form').serializeObject();
+
+            if(radioButtonSelected=='phys'){
+                form['fio'] = form['lastname'] +' '+form['firstname'] +' ' + form['surname'];
+                delete form['lastname'];
+                delete form['firstname'];
+                delete form['surname'];
+            }
+
             form['id'] = $('#id-stoplist-edit').text();
             var cc = {};
             cc['code'] = $("#codificator-select-ed-add option:selected" ).val();
@@ -732,11 +934,12 @@ function ajaxDrawSelect(company, department, codificator, source){
 
             form['createCompany'] = $("#company-select-ed-add option:selected" ).val();
             form['createDepartment'] = $("#department-select-ed-add option:selected" ).val();
+            form['source'] = $("#source-select-ed-add option:selected" ).val();
 
             $('#editStoplist-modal').modal('hide');
             $.ajax({
                 type: "post",
-                url: "/stoplist/ajax/editStoplistRow",
+                url: "stoplist/ajax/editStoplistRow",
                 dataType: 'json',
                 data:JSON.stringify(form),
                 contentType: "application/json; charset=utf-8",
@@ -761,9 +964,9 @@ function ajaxDrawSelect(company, department, codificator, source){
                 },
                 error: function (xhr, status, error) {
                     notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-                    console.log(xhr);
-                    console.log(status);
-                    console.log(error);
+                    if(xhr.responseJSON.status == 405){
+                        $('#error-modal').modal('show');
+                    }
                 }
             });
         }
@@ -788,7 +991,7 @@ function ajaxDrawSelect(company, department, codificator, source){
 
         $.ajax({
             type: "post",
-            url: "/stoplist/ajax/deleteStoplistRow",
+            url: "stoplist/ajax/deleteStoplistRow",
             // dataType: 'json',
             data:{id:id},
             success: function (data) {
@@ -810,30 +1013,42 @@ function ajaxDrawSelect(company, department, codificator, source){
             },
             error: function (xhr, status, error) {
                 notifyAfterAjax('danger','Простите, но запись не удалена :(');
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
+                if(xhr.responseJSON.status == 405){
+                    $('#error-modal').modal('show');
+                }
             }
         });
     });
 
     $('#searchStoplist-submit').on('click', function(e) {
 
-        console.log('cc');
-//
         var $theForm = $('#searchStoplist-form');
         var check = $theForm[0].checkValidity();
-        console.log(check);
         if (( typeof($theForm[0].checkValidity) == "function" ) && !$theForm[0].checkValidity()) {
             return;
         }
         var form = $('#searchStoplist-form').serializeObject();
         $('#searchStoplist-modal').modal('hide');
+
+        var subject = form['subject'];
+        var formSearch = {};
+        if(subject=='jur'){
+            formSearch['subject'] = 'jur';
+            formSearch['searchJur'] = form;
+            formSearch['searchPhys'] = null;
+        }else if(subject=='phys'){
+            formSearch['subject'] = 'phys';
+            formSearch['searchPhys'] = form;
+            formSearch['searchJur'] = null;
+        }
+
+        // console.log(JSON.stringify(formSearch));
+
         $.ajax({
             type: "post",
-            url: "/stoplist/ajax/searchStopList",
+            url: "stoplist/ajax/searchStopList",
             dataType: 'json',
-            data:JSON.stringify(form),
+            data:JSON.stringify(formSearch),
             contentType: "application/json; charset=utf-8",
             success: function (data) {
                  tableStopList.clear().draw();
@@ -862,9 +1077,9 @@ function ajaxDrawSelect(company, department, codificator, source){
             },
             error: function (xhr, status, error) {
                 notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
+                if(xhr.responseJSON.status == 405){
+                    $('#error-modal').modal('show');
+                }
             }
         });
         e.preventDefault()

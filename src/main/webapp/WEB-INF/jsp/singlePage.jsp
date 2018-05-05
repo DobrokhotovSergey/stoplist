@@ -44,8 +44,8 @@
 
 <script src="resources/jquery/jquery.min.js"></script>
 <script src="resources/project/js/jquery-ui.min.js"></script>
-<script src="/resources/singlePage/assets/js/jquery.spapp.js"></script>
-<script src="/resources/singlePage/assets/js/custom.js"></script>
+<script src="resources/singlePage/assets/js/jquery.spapp.js"></script>
+<script src="resources/singlePage/assets/js/custom.js"></script>
 <script>
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");

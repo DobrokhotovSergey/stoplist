@@ -89,12 +89,13 @@
                             </select>
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-success" id="addUser-submit">Создать</button>
+                    </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
-                <button type="submit" class="btn btn-success" id="addUser-submit">Создать</button>
-            </div>
+
 
         </div>
     </div>
@@ -223,7 +224,7 @@
         var block = '<div class="post">'+
             '<div class="user-block">'+
             '<span class="divCrop"></span>'+
-            '<img class="img-circle img-bordered-sm crop" src="/stoplist/getAvatar/'+user+'" onerror="this.src=\'/resources/project/images/admin.png\'" alt="user image">'+
+            '<img class="img-circle img-bordered-sm crop" src="stoplist/getAvatar/'+user+'" onerror="this.src=\'resources/project/images/admin.png\'" alt="user image">'+
             '<span class="username">'+
             '<a href="#"><span class="imageFormat-firstname">'+firstname+'</span> <span class="imageFormat-lastname">'+lastname+'</span></a>'+
 
@@ -245,7 +246,7 @@
 
         $.ajax({
             type: "post",
-            url: "/stoplist/ajax/getOnlineUsers",
+            url: "stoplist/ajax/getOnlineUsers",
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
 
@@ -284,39 +285,51 @@
         });
     }
     $('#addUser-submit').on('click', function(){
-        var form = $('#addUser-form').serializeObject();
-        form['userRole'] = {role: form.userRole};
-        $('#addUser-modal').modal('hide');
-        $.ajax({
-            type: "post",
-            url: "/stoplist/ajax/createUser",
-            dataType: 'json',
-            data:JSON.stringify(form),
-            contentType: "application/json; charset=utf-8",
-            success: function (item) {
-                console.log(item);
-                tableUsers.row.add([item.userRole.userRoleId, item.username,
-                    getImageUserFormat(item.username, item.firstname, item.lastname, item.position),
-                    item.userRole.role,getStatusUser(item.online),
-                    '<a class="btn btn-info edit-user btn-xs"><i class="fa fa-pencil"></i> Ред. </a>  '+
-                    '<a class="btn btn-danger delete-user  btn-xs"><i class="fa  fa-trash-o"></i> Удал. </a>']).draw();
-                notifyAfterAjax('success','создан новый Пользователь!');
-            },
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(header, token);
-                beforeSend();
-            },
-            complete: function () {
-                NProgress.done();
-                unblock_screen();
-            },
-            error: function (xhr, status, error) {
-                notifyAfterAjax('danger','Простите, но Пользователь не был создан :(');
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
-            }
-        });
+
+        var $theForm = $('#addUser-form');
+        var check = $theForm[0].checkValidity();
+
+        if (( typeof($theForm[0].checkValidity) == "function" ) && !$theForm[0].checkValidity()) {
+            return;
+        }
+
+        if(check){
+            var form = $('#addUser-form').serializeObject();
+            form['userRole'] = {role: form.userRole};
+            $('#addUser-modal').modal('hide');
+            $.ajax({
+                type: "post",
+                url: "stoplist/ajax/createUser",
+                dataType: 'json',
+                data:JSON.stringify(form),
+                contentType: "application/json; charset=utf-8",
+                success: function (item) {
+                    tableUsers.row.add([item.userRole.userRoleId, item.username,
+                        getImageUserFormat(item.username, item.firstname, item.lastname, item.position),
+                        item.userRole.role,getStatusUser(item.online),
+                        '<a class="btn btn-info edit-user btn-xs"><i class="fa fa-pencil"></i> Ред. </a>  '+
+                        '<a class="btn btn-danger delete-user  btn-xs"><i class="fa  fa-trash-o"></i> Удал. </a>']).draw();
+                    notifyAfterAjax('success','создан новый Пользователь!');
+                },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                    beforeSend();
+                },
+                complete: function () {
+                    NProgress.done();
+                    unblock_screen();
+                },
+                error: function (xhr, status, error) {
+                    notifyAfterAjax('danger','Простите, но Пользователь не был создан :(');
+                    console.log(xhr);
+                    console.log(status);
+                    console.log(error);
+                }
+            });
+        }
+        return false;
+
+
     });
     $('#user-table tbody').on('click', 'tr td .delete-user', function(){
         $('#deleteUser-modal').modal('show');
@@ -333,7 +346,7 @@
         var id = $('#id-user-delete').text();
         $.ajax({
             type: "post",
-            url: "/stoplist/ajax/deleteUser",
+            url: "stoplist/ajax/deleteUser",
             // dataType: 'json',
             data:JSON.stringify({userRole:{userRoleId:id}, username:user}),
             contentType: "application/json; charset=utf-8",
@@ -390,7 +403,7 @@
         console.log(form);
         $.ajax({
             type: "post",
-            url: "/stoplist/ajax/editUser",
+            url: "stoplist/ajax/editUser",
             dataType: 'json',
             data:JSON.stringify(form),
             contentType: "application/json; charset=utf-8",
@@ -439,7 +452,7 @@
         oMyForm.append("file", files[0]);
         $.ajax({
             dataType : 'json',
-            url : "/stoplist/ajax/uploadUserImage",
+            url : "stoplist/ajax/uploadUserImage",
             data : oMyForm,
             type : "post",
             enctype: 'multipart/form-data',

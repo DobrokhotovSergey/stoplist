@@ -37,7 +37,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<script src="resources/dist/js/html5shiv.min.js"></script>
 	<script src="resources/dist/js/respond.min.js"></script>
 	<![endif]-->
-	<link rel="stylesheet" href="/resources/singlePage/assets/css/spapp.css" />
+	<link rel="stylesheet" href="resources/singlePage/assets/css/spapp.css" />
 
 	<!-- Google Font -->
 	<link rel="stylesheet" href="resources/dist/css/google-font.css">
@@ -54,7 +54,27 @@ scratch. This page gets rid of all links and provides the needed markup only.
 		}
 	</style>
 </head>
+<div class="modal modal-form fade bs-example-modal-nm" id="error-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-nm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title">Произошла ошибка</h4>
+			</div>
+			<div class="modal-body">
+				<form id="deleteUser-form" data-parsley-validate class="form-horizontal form-label-left">
+					Возникла ошибка, попробуйте перезагрузить страницу.
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+				<button type="submit" class="btn btn-success" id="error-submit">Перезагрузить</button>
+			</div>
 
+		</div>
+	</div>
+</div>
 <div class="modal modal-form fade bs-example-modal-nm" id="update-profile-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-nm">
 		<div class="modal-content">
@@ -71,7 +91,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<!-- Profile Image -->
 						<div class="box box-primary">
 							<div class="box-body box-profile">
-								<img class="img-responsive" id="preload-profile" src="/stoplist/getAvatar/${login}"  onerror="this.src='/resources/project/images/admin.png'" alt="User profile picture">
+								<img class="img-responsive" id="preload-profile" src="stoplist/getAvatar/${login}"  onerror="this.src='resources/project/images/admin.png'" alt="User profile picture">
 
 								<h3 class="profile-username text-center"></h3>
 								<p class="text-muted text-center" profile-username-position></p>
@@ -179,14 +199,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<!-- Menu Toggle Button -->
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<!-- The user image in the navbar-->
-							<img src="/stoplist/getAvatar/${login}"  onerror="this.src='/resources/project/images/admin.png'" class="user-image" alt="User Image">
+							<img src="stoplist/getAvatar/${login}"  onerror="this.src='resources/project/images/admin.png'" class="user-image" alt="User Image">
 							<!-- hidden-xs hides the username on small devices so only the image appears. -->
 							<span class="hidden-xs">${firstname} ${lastname}</span>
 						</a>
 						<ul class="dropdown-menu">
 							<!-- The user image in the menu -->
 							<li class="user-header" style="height: auto">
-								<img src="/stoplist/getAvatar/${login}" onerror="this.src='/resources/project/images/admin.png'"  class="img-circle" alt="User Image">
+								<img src="stoplist/getAvatar/${login}" onerror="this.src='resources/project/images/admin.png'"  class="img-circle" alt="User Image">
 
 								<p>
 									${firstname} ${lastname} - ${position}
@@ -199,7 +219,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 								</div>
 								</sec:authorize>
 								<div class="pull-right">
-									<a href="/logout" class="btn btn-primary btn-flat">Выйти</a>
+									<a href="logout" class="btn btn-primary btn-flat">Выйти</a>
 								</div>
 							</li>
 						</ul>
@@ -218,7 +238,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<!-- Sidebar user panel (optional) -->
 			<div class="user-panel">
 				<div class="pull-left image">
-					<img src="/stoplist/getAvatar/${login}" onerror="this.src='/resources/project/images/admin.png'"  class="img-circle" alt="User Image">
+					<img src="stoplist/getAvatar/${login}" onerror="this.src='resources/project/images/admin.png'"  class="img-circle" alt="User Image">
 				</div>
 				<div class="pull-left info">
 					<p>${firstname} ${lastname}</p>
@@ -237,11 +257,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 				<sec:authorize access="hasRole('ROLE_RADMIN') or hasRole('ROLE_SADMIN') or hasRole('ROLE_SECURITY')">
 				<li><a href="#tableCodificator"><i class="fa fa-list"></i> <span>Кодификатор</span></a></li>
 				</sec:authorize>
+				<li><a href="#tableDashboard"><i class="fa fa-line-chart"></i> <span>Дашборд</span></a></li>
 				<sec:authorize access="hasRole('ROLE_RADMIN') or hasRole('ROLE_SADMIN')">
 
 					<li class="header">Управление Пользователями</li>
 					<li><a href="#users"><i class="fa fa-users"></i> <span>Пользователи</span></a></li>
 				</sec:authorize>
+				<li><a href="https://docs.google.com/document/d/1HqL_5DPmJEWHESKJ19PRryhHhTiwYcmou-CTjTRD13Y" target="_blank"><i class="fa fa-book"></i> <span>Описание API</span></a></li>
 			</ul>
 			<!-- /.sidebar-menu -->
 		</section>
@@ -252,10 +274,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 	<div class="content-wrapper" id="spapp" role="main">
 		<section id="users" class="content container-fluid" data-load="users"></section>
 
-
+		<section id="tableDashboard" class="content container-fluid" data-load="tableDashboard"></section>
 		<section id="error_404" class="content container-fluid"><h1>Page not found</h1></section>
-			<section id="tableCodificator" class="content container-fluid" data-load="tableCodificator"></section>
-			<section id="tableStopList" class="content container-fluid" data-load="tableStopList"></section>
+		<section id="tableCodificator" class="content container-fluid" data-load="tableCodificator"></section>
+		<section id="tableStopList" class="content container-fluid" data-load="tableStopList"></section>
+
 
 	</div>
 	<!-- /.content-wrapper -->
@@ -337,6 +360,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         $('#update-profile-modal').modal('show');
     };
 
+
+    $('#error-submit').on('click', function(){
+        location.reload();
+    });
 
 </script>
 <!-- Optionally, you can add Slimscroll and FastClick plugins.

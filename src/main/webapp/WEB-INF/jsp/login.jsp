@@ -40,7 +40,7 @@
 	<div class="login_wrapper">
 		<div class="animate form login_form">
 			<section class="login_content">
-				<form role="form" action="/login" method="POST">
+				<form role="form" action="login" method="POST">
 					<h2><div class="glyphicon glyphicon-user"></div></h2>
 					<div>
 						<input type="text" class="form-control" name="username" placeholder="username" required="" />

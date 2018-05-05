@@ -126,7 +126,7 @@ $('#add-codificator-plus').on('click', function(){
         $('#addStoplist-codificator-modal').modal('hide');
         $.ajax({
             type: "post",
-            url: "/stoplist/ajax/insertCodificator",
+            url: "stoplist/ajax/insertCodificator",
             dataType: 'json',
             data:JSON.stringify(form),
             contentType: "application/json; charset=utf-8",
@@ -152,9 +152,9 @@ $('#add-codificator-plus').on('click', function(){
             },
             error: function (xhr, status, error) {
                 notifyAfterAjax('danger','Простите, но Кодификатор не добавлен :(');
-                console.log(xhr);
-                console.log(status);
-                console.log(error);
+                if(xhr.responseJSON.status == 405){
+                    $('#error-modal').modal('show');
+                }
             }
         });
         return false;
@@ -162,7 +162,7 @@ $('#add-codificator-plus').on('click', function(){
 
     $.ajax({
         type: "post",
-        url: "/stoplist/ajax/getListCodificators",
+        url: "stoplist/ajax/getListCodificators",
         dataType: 'json',
         contentType: "application/json; charset=utf-8",
         success: function (data) {
@@ -188,9 +188,9 @@ $('#add-codificator-plus').on('click', function(){
         },
         error: function (xhr, status, error) {
             notifyAfterAjax('danger','Простите, но Ничего не найдено :(');
-            console.log(xhr);
-            console.log(status);
-            console.log(error);
+            if(xhr.responseJSON.status == 405){
+                $('#error-modal').modal('show');
+            }
         }
     });
 </script>
